@@ -17,6 +17,7 @@ class SystemUsers extends Migration
             $table->bigIncrements('user_id');
             $table->integer('group_id');
             $table->string('user_fullname', 120)->nullable();
+            $table->string('user_name', 30);
             $table->string('user_email', 120);
             $table->string('user_password', 220);
             $table->char('is_new', 1)->default('Y');

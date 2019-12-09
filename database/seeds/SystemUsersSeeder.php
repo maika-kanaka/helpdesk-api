@@ -13,6 +13,7 @@ class SystemUsersSeeder extends Seeder
     {
         DB::table('system_users')->insert([
             'group_id' => 1, // root
+            'user_name' => 'maika-kanaka',
             'user_fullname' => 'Maika Kanaka',
             'user_email' => 'bif@maika-kanaka.com',
             'user_password' => password_hash('123456', PASSWORD_DEFAULT),
