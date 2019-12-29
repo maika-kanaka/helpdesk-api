@@ -15,5 +15,7 @@ return [
 
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-
+    'email_or_username_not_registered' => 'The email/username you entered does not belong to any account.',
+    'combination_username_password_incorrect' => 'The username and password combination is invalid',
+    'your_account_is_blocked' => 'Your account is blocked'
 ];

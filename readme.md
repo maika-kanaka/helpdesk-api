@@ -7,12 +7,13 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
-## Tentang projek ini 
-
-- Menghapus auth bawaan
-- Merancang table login logout standart untuk app internal (non sign up)
-
 ## TODO
 
-- Helpers bawaan
-- Membuat packagest auth sendiri
+- api login 
+  tambah field team_id (pikirin ini bisa multiple atau enggak)
+  
+
+- api team support
+- api category
+
+## 
