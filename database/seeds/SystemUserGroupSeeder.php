@@ -23,7 +23,7 @@ class SystemUserGroupSeeder extends Seeder
 
             [
                 'group_id' => 2,
-                'group_name' => 'Technician IT',
+                'group_name' => 'Technician',
                 'group_desc' => NULL,
 
                 'created_at' => '2000-01-01 00:00:00',
