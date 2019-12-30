@@ -53,6 +53,34 @@ class SystemMenusSeeder extends Seeder
             'menu_desc' => NULL,
             'menu_order' => 3,
             'is_active' => 'Y',
+
+            'created_at' => '2000-01-01 00:00:00',
+            'created_by' => 0
+        ];
+
+        /*
+        * MASTER
+        */
+        $menus[] = [
+            'menu_id' => 'master',
+            'menu_id_top' => NULL,
+            'menu_name' => 'Master',
+            'menu_desc' => NULL,
+            'menu_order' => 1,
+            'is_active' => 'Y',
+
+            'created_at' => '2000-01-01 00:00:00',
+            'created_by' => 0
+        ];
+
+        $menus[] = [
+            'menu_id' => 'master_supports',
+            'menu_id_top' => 'master',
+            'menu_name' => 'Master Supports',
+            'menu_desc' => NULL,
+            'menu_order' => 1,
+            'is_active' => 'Y',
+
             'created_at' => '2000-01-01 00:00:00',
             'created_by' => 0
         ];

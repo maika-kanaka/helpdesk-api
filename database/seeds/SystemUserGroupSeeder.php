@@ -12,11 +12,23 @@ class SystemUserGroupSeeder extends Seeder
     public function run()
     {
         DB::table('system_user_group')->insert([
-            'group_name' => 'Root',
-            'group_desc' => 'login as root/superadmin',
+            [
+                'group_id' => 1,
+                'group_name' => 'Root',
+                'group_desc' => 'login as root/superadmin',
 
-            'created_at' => '2000-01-01 00:00:00',
-            'created_by' => 0
+                'created_at' => '2000-01-01 00:00:00',
+                'created_by' => 0
+            ],
+
+            [
+                'group_id' => 2,
+                'group_name' => 'Technician IT',
+                'group_desc' => NULL,
+
+                'created_at' => '2000-01-01 00:00:00',
+                'created_by' => 0
+            ]
         ]);
     }
 }
