@@ -16,3 +16,7 @@ use Illuminate\Http\Request;
 Route::post('sys/user/login', [
     'uses' => 'Api\Sys\UserController@login'
 ]);
+
+Route::post('sys/user/registration', [
+    'uses' => 'Api\Sys\UserController@registration'
+]);

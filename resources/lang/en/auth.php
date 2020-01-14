@@ -17,5 +17,7 @@ return [
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'email_or_username_not_registered' => 'The email/username you entered does not belong to any account.',
     'combination_username_password_incorrect' => 'The username and password combination is invalid',
-    'your_account_is_blocked' => 'Your account is blocked'
+    'your_account_is_blocked' => 'Your account is blocked',
+    'username_is_already' => 'Username is already exists',
+    'email_is_already' => 'Username is already exists',
 ];

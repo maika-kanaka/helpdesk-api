@@ -9,10 +9,6 @@
 
 ## TODO
 
-- api login 
-  tambah field team_id (pikirin ini bisa multiple atau enggak)
-  
-
 - api team support
 - api category
 

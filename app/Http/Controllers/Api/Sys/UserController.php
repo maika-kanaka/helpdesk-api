@@ -1,5 +1,8 @@
-<?php namespace App\Http\Controllers\Api\Sys;
+<?php
 
+namespace App\Http\Controllers\Api\Sys;
+
+use Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -12,80 +15,141 @@ use App\Models\Master\Support;
 class UserController extends Controller
 {
 
-  public function login(Request $request)
-  {
-    # get input
-    $email_or_username = trim($request->input('email_or_username'));
-    $password = trim($request->input('password'));
-
-    # db check
-    $user = User::table()
-                 ->where("user_email", $email_or_username)
-                 ->orWhere("user_name", $email_or_username)
-                 ->first();
-
-    # valid: email
-    if(empty($user))
+    public function data()
     {
-      $message = __('auth.email_or_username_not_registered');
-
-      return response()->json(array(
-        'valid' => false,
-        'message' => $message
-      ));
     }
 
-    # valid: password
-    if(!password_verify($password, $user->user_password))
+    public function login(Request $request)
     {
-      $message = __("auth.combination_username_password_incorrect");
+        # get input
+        $email_or_username = trim($request->input('email_or_username'));
+        $password = trim($request->input('password'));
 
-      return response()->json(array(
-        'valid' => false,
-        'message' => $message
-      ));
+        # db check
+        $user = User::table()
+            ->where("user_email", $email_or_username)
+            ->orWhere("user_name", $email_or_username)
+            ->first();
+
+        # valid: email
+        if (empty($user)) {
+            $message = __('auth.email_or_username_not_registered');
+
+            return response()->json(array(
+                'valid' => false,
+                'message' => $message
+            ));
+        }
+
+        # valid: password
+        if (!password_verify($password, $user->user_password)) {
+            $message = __("auth.combination_username_password_incorrect");
+
+            return response()->json(array(
+                'valid' => false,
+                'message' => $message
+            ));
+        }
+
+        # valid: is blocked ?
+        if ($user->is_block == 'Y') {
+            $message = __('auth.your_account_is_blocked');
+
+            return response()->json(array(
+                'valid' => false,
+                'message' => $message
+            ));
+        }
+
+        unset($user->user_password);
+        unset($user->is_block);
+        unset($user->is_confirm);
+
+        # ambil data user support ( teknisi )
+        $user_support = [];
+        if ($user->group_id == 2) {
+            $user_support = UserSupport::table()
+                ->where('user_id', $user->user_id)
+                ->orderBy('support_id')
+                ->get();
+        }
+
+        $token = array(
+            "iss" => config('jwt.iss'),
+            "aud" => config('jwt.aud'),
+            "iat" => config('jwt.iat'),
+            "nbf" => config('jwt.nbf'),
+            "data" => $user
+        );
+
+        $jwt = JWT::encode($token, config('jwt.key'));
+
+        return response()->json(array(
+            'valid' => true,
+            'jwt' => $jwt,
+            'user' => $user,
+            'user_support' => $user_support,
+        ));
     }
 
-    # valid: is blocked ?
-    if($user->is_block == 'Y'){
-      $message = __('auth.your_account_is_blocked');
-
-      return response()->json(array(
-        'valid' => false,
-        'message' => $message
-      ));
-    }
-
-    unset($user->user_password);
-    unset($user->is_block);
-    unset($user->is_confirm);
-
-    # ambil data user support ( teknisi )
-    $user_support = [];
-    if($user->group_id == 2)
+    public function registration(Request $request)
     {
-        $user_support = UserSupport::table()
-                        ->where('user_id', $user->user_id)
-                        ->orderBy('support_id')
-                        ->get();
+        $validator = Validator::make($request->all(), [
+            'fullname' => 'required',
+            'username' => 'required',
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => False,
+                'errors' => $validator,
+                'message' => ''
+            ]);
+        }
+
+        # get input
+        $input['created_at'] = date('Y-m-d H:i:s');
+        $input['user_fullname'] = trim(htmlentities($request->input('fullname')));
+        $input['user_name'] = trim(htmlentities($request->input('username')));
+        $input['user_email'] = trim(htmlentities($request->input('email')));
+        $input['user_password'] = password_hash($request->input('password'), PASSWORD_DEFAULT);
+        $input['is_new'] = 'Y';
+
+        # valid: unique username
+        $user = User::table()->where('user_name', $input['user_name'])->first();
+        if(!empty($user)){
+            return response()->json([
+                'status' => False,
+                'message' => __('auth.username_is_already')
+            ]);
+        }
+
+        # valid: unique email
+        $email = User::table()->where('user_email', $input['user_email'])->first();
+        if(!empty($email)){
+            return response()->json([
+                'status' => False,
+                'message' => __('auth.email_is_already')
+            ]);
+        }
+
+        # valid: minimun requirement for password
+
+
+        # insert
+        $insert = User::table()->insert($input);
+
+        # message
+        return response()->json([
+            'status' => $insert
+        ]);
     }
 
-    $token = array(
-      "iss" => config('jwt.iss'),
-      "aud" => config('jwt.aud'),
-      "iat" => config('jwt.iat'),
-      "nbf" => config('jwt.nbf'),
-      "data" => $user
-    );
+    public function forgot_password()
+    {
 
-    $jwt = JWT::encode($token, config('jwt.key'));
-
-    return response()->json(array(
-      'valid' => true,
-      'jwt' => $jwt,
-      'user' => $user,
-      'user_support' => $user_support,
-    ));
-  }
+    }
 
 }
