@@ -58,6 +58,7 @@ class UserController extends Controller
         }
         $input['user_description'] = trim(htmlentities($request->input('description')));
         $input['group_id'] = trim(htmlentities($request->input('group_id')));
+        $input['is_block'] = $request->input('is_block') == 'false' ? 'N' : 'Y';
 
         $input['is_new'] = 'N';
         $input['updated_at'] = date('Y-m-d H:i:s');
