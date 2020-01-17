@@ -85,6 +85,34 @@ class SystemMenusSeeder extends Seeder
             'created_by' => 0
         ];
 
+        /*
+        * TICKETS
+        */
+
+        $menus[] = [
+            'menu_id' => 'tickets',
+            'menu_id_top' => NULL,
+            'menu_name' => 'Tickets',
+            'menu_desc' => NULL,
+            'menu_order' => 1,
+            'is_active' => 'Y',
+
+            'created_at' => '2000-01-01 00:00:00',
+            'created_by' => 0
+        ];
+
+        $menus[] = [
+            'menu_id' => 'ticker_cud',
+            'menu_id_top' => 'tickets',
+            'menu_name' => 'Add, Edit, Cancel',
+            'menu_desc' => NULL,
+            'menu_order' => 1,
+            'is_active' => 'Y',
+
+            'created_at' => '2000-01-01 00:00:00',
+            'created_by' => 0
+        ];
+
         DB::table('system_menus')->insert($menus);
     }
 }

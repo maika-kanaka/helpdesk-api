@@ -36,6 +36,19 @@ class SystemUsersSeeder extends Seeder
 
                 'created_at' => '2000-01-01 00:00:00',
                 'created_by' => 0
+            ],
+
+            [
+                'group_id' => 3,
+                'user_id' => 3,
+                'user_fullname' => 'Ny. Requester',
+                'user_name' => 'requester',
+                'user_email' => 'requester@maika-kanaka.com',
+                'user_password' => password_hash('123456', PASSWORD_DEFAULT),
+                'is_new' => 'N',
+
+                'created_at' => '2000-01-01 00:00:00',
+                'created_by' => 0
             ]
         ]);
     }

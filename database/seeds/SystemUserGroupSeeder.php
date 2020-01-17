@@ -28,6 +28,15 @@ class SystemUserGroupSeeder extends Seeder
 
                 'created_at' => '2000-01-01 00:00:00',
                 'created_by' => 0
+            ],
+
+            [
+                'group_id' => 3,
+                'group_name' => 'Requester',
+                'group_desc' => NULL,
+
+                'created_at' => '2000-01-01 00:00:00',
+                'created_by' => 0
             ]
         ]);
     }
