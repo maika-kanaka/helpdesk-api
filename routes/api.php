@@ -20,3 +20,11 @@ Route::post('sys/user/login', [
 Route::post('sys/user/registration', [
     'uses' => 'Api\Sys\UserController@registration'
 ]);
+
+Route::get('sys/user/data', [
+    'uses' => 'Api\Sys\UserController@data'
+]);
+
+Route::post('sys/user/update', [
+    'uses' => 'Api\Sys\UserController@update'
+]);

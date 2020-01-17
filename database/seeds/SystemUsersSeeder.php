@@ -19,6 +19,7 @@ class SystemUsersSeeder extends Seeder
                 'user_fullname' => 'Maika Kanaka',
                 'user_email' => 'bif@maika-kanaka.com',
                 'user_password' => password_hash('123456', PASSWORD_DEFAULT),
+                'is_new' => 'N',
 
                 'created_at' => '2000-01-01 00:00:00',
                 'created_by' => 0
@@ -31,6 +32,7 @@ class SystemUsersSeeder extends Seeder
                 'user_name' => 'technician',
                 'user_email' => 'technician@maika-kanaka.com',
                 'user_password' => password_hash('123456', PASSWORD_DEFAULT),
+                'is_new' => 'N',
 
                 'created_at' => '2000-01-01 00:00:00',
                 'created_by' => 0

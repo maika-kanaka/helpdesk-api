@@ -15,8 +15,60 @@ use App\Models\Master\Support;
 class UserController extends Controller
 {
 
-    public function data()
+    public function data(Request $request)
     {
+        # param
+        $user_id = $request->get('user_id');
+
+        # query
+        $query = User::table()->orderBy('user_name');
+        if(!empty($user_id)){
+            $query->where('user_id', $user_id);
+        }
+        $users = $query->get();
+
+        foreach($users as $k => $user)
+        {
+            // image default
+            if(empty($user->user_photo)){
+                $users[$k]->user_photo = asset("imgs/user/default.png");
+            }
+
+            unset($users[$k]->user_password);
+        }
+
+        return response()->json([
+            'users' => $users,
+            'status' => True
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        # param
+        $user_id = $request->input('user_id');
+
+        # tangkap input
+        $input['user_fullname'] = trim(htmlentities($request->input('fullname')));
+        $input['user_name'] = trim(htmlentities($request->input('username')));
+        $input['user_email'] = trim(htmlentities($request->input('email')));
+        $password = trim($request->input('password'));
+        if(!empty($password)){
+            $input['user_password'] = password_hash($password, PASSWORD_DEFAULT);
+        }
+        $input['user_description'] = trim(htmlentities($request->input('description')));
+        $input['group_id'] = trim(htmlentities($request->input('group_id')));
+
+        $input['is_new'] = 'N';
+        $input['updated_at'] = date('Y-m-d H:i:s');
+
+        # update
+        User::table()->where('user_id', $user_id)->update($input);
+
+        # lempar
+        return response()->json([
+            'status' => true
+        ]);
     }
 
     public function login(Request $request)

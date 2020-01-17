@@ -15,6 +15,8 @@ class ChangeDefaultValueUser extends Migration
     {
         Schema::table('system_users', function (Blueprint $table) {
             $table->integer('group_id')->nullable()->change();
+            $table->char('user_description', 255)->nullable();
+            $table->char('user_photo', 10)->nullable();
         });
     }
 
@@ -25,6 +27,8 @@ class ChangeDefaultValueUser extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('system_users', function (Blueprint $table) {
+            $table->dropColumn(['user_description', 'user_photo']);
+        });
     }
 }
