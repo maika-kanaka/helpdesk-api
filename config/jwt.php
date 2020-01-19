@@ -3,6 +3,7 @@
 return [
 
   'key' => env('JWT_KEY', 'aliaskey'),
+  'algo' => env('JWT_ALGO', Array('HS256')),
   'iss' => env('JWT_ISS', 'http://maika-kanaka.id'),
   'aud' => env('JWT_AUD', 'http://127.0.0.1'),
   'iat' => env('JWT_IAT', 1356999524),

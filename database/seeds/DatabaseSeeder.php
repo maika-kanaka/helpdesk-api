@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SystemUserGroupAccessSeeder::class);
 
         $this->call(MasterSupportsSeeder::class);
+        $this->call(MasterCategoriesSeeder::class);
         $this->call(SystemUserSupportSeeder::class);
     }
 }

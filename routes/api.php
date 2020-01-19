@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::get('master/categories', [
+    'uses' => 'Api\Master\CategoryController@data'
+]);
+
 Route::post('sys/user/login', [
     'uses' => 'Api\Sys\UserController@login'
 ]);
@@ -27,4 +31,14 @@ Route::get('sys/user/data', [
 
 Route::post('sys/user/update', [
     'uses' => 'Api\Sys\UserController@update'
+]);
+
+
+
+Route::get('trx/ticket/data', [
+    'uses' => 'Api\Trx\TicketController@data'
+]);
+
+Route::post('trx/ticket/save', [
+    'uses' => 'Api\Trx\TicketController@save'
 ]);

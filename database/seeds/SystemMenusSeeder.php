@@ -85,6 +85,18 @@ class SystemMenusSeeder extends Seeder
             'created_by' => 0
         ];
 
+        $menus[] = [
+            'menu_id' => 'master_categories',
+            'menu_id_top' => 'master',
+            'menu_name' => 'Master Categories',
+            'menu_desc' => NULL,
+            'menu_order' => 2,
+            'is_active' => 'Y',
+
+            'created_at' => '2000-01-01 00:00:00',
+            'created_by' => 0
+        ];
+
         /*
         * TICKETS
         */
@@ -102,11 +114,35 @@ class SystemMenusSeeder extends Seeder
         ];
 
         $menus[] = [
-            'menu_id' => 'ticker_cud',
+            'menu_id' => 'ticket_cud',
             'menu_id_top' => 'tickets',
             'menu_name' => 'Add, Edit, Cancel',
             'menu_desc' => NULL,
             'menu_order' => 1,
+            'is_active' => 'Y',
+
+            'created_at' => '2000-01-01 00:00:00',
+            'created_by' => 0
+        ];
+
+        $menus[] = [
+            'menu_id' => 'ticket_view_all',
+            'menu_id_top' => 'tickets',
+            'menu_name' => 'View All Data',
+            'menu_desc' => NULL,
+            'menu_order' => 2,
+            'is_active' => 'Y',
+
+            'created_at' => '2000-01-01 00:00:00',
+            'created_by' => 0
+        ];
+
+        $menus[] = [
+            'menu_id' => 'ticket_view_support',
+            'menu_id_top' => 'tickets',
+            'menu_name' => 'View All Data (related Support)',
+            'menu_desc' => NULL,
+            'menu_order' => 3,
             'is_active' => 'Y',
 
             'created_at' => '2000-01-01 00:00:00',

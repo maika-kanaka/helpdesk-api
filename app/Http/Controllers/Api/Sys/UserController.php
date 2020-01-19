@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use \Firebase\JWT\JWT;
 
 use App\Models\Sys\User;
+use App\Models\Sys\Group;
 use App\Models\Sys\UserSupport;
 use App\Models\Master\Support;
 
@@ -127,12 +128,25 @@ class UserController extends Controller
                 ->get();
         }
 
+        # ambil hak akses berdasarkan group
+        $can_access_menu = [];
+        $group_access = Group::tableAccess()->where('group_id', $user->group_id)->get();
+        if(!empty($group_access))
+        {
+            foreach($group_access as $kga => $vga)
+            {
+                if($vga->can_access == 'Y'){
+                    $can_access_menu[] = $vga->menu_id;
+                }
+            }
+        }
+
         $token = array(
             "iss" => config('jwt.iss'),
             "aud" => config('jwt.aud'),
             "iat" => config('jwt.iat'),
             "nbf" => config('jwt.nbf'),
-            "data" => $user
+            "user" => $user
         );
 
         $jwt = JWT::encode($token, config('jwt.key'));
@@ -142,6 +156,7 @@ class UserController extends Controller
             'jwt' => $jwt,
             'user' => $user,
             'user_support' => $user_support,
+            'can_access_menu' => $can_access_menu
         ));
     }
 
