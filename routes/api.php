@@ -42,3 +42,7 @@ Route::get('trx/ticket/data', [
 Route::post('trx/ticket/save', [
     'uses' => 'Api\Trx\TicketController@save'
 ]);
+
+Route::post('trx/ticket/status/change', [
+    'uses' => 'Api\Trx\TicketController@status_change'
+]);

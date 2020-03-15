@@ -25,12 +25,13 @@ class TicketController extends Controller
         $ticket_id = $request->get('ticket_id');
 
         # authentification
-        $data_jwt = JWT::decode($jwt, config('jwt.key'), array('HS256'));
+        $data_jwt = JWT::decode($jwt, config('jwt.key'), config('jwt.algo'));
 
         # query
         $query = Ticket::table('t_ticket')
-                        ->select(\DB::raw('t_ticket.*, t_cat.category_name'))
+                        ->select(\DB::raw('t_ticket.*, t_cat.category_name, u_created.user_fullname'))
                         ->leftJoin(Category::$table . " as t_cat", "t_cat.category_id", "=", "t_ticket.category_id")
+                        ->leftJoin(User::$table . " as u_created", "u_created.user_id", "=", "t_ticket.created_by")
                         ->orderBy('t_ticket.created_at', 'desc');
 
         # filter ambil data berdasarkan hak akses
@@ -131,5 +132,53 @@ class TicketController extends Controller
 
         return ['input' => $input, 'image' => $image];
     }
+
+    public function status_change(Request $request)
+    {
+        # param
+        $ticket_id = trim($request->input('ticket_id'));
+        $status = trim($request->input('status'));
+        $jwt = trim($request->input('jwt'));
+
+        # hak akses
+        try {
+            $data_jwt = JWT::decode($jwt, config('jwt.key'), config('jwt.algo'));
+        } catch (\Exception $e) {
+            $data_jwt = false;
+        }
+
+        if($data_jwt === false){
+            return response()->json(array('is_valid' => false, 'message' => 'Token invalid!'));
+        }
+
+        # data
+        $data_ticket = Ticket::table()->where('ticket_id', $ticket_id)->first();
+
+        # kondisi update
+        $update = [];
+        if($status == 'accept' && $data_ticket->ticket_status == 'open'){
+            $update = [
+                'ticket_status' => 'accepted',
+                'accepted_at' => date('Y-m-d H:i:s'),
+                'accepted_by' => $data_jwt->user->user_id
+            ];
+        }else if($status == 'reject' && $data_ticket->ticket_status == 'open'){
+            $update = [
+                'ticket_status' => 'rejected',
+                'rejected_at' => date('Y-m-d H:i:s'),
+                'rejected_by' => $data_jwt->user->user_id,
+                'rejected_notes' => trim(htmlentities($request->input('reason')))
+            ];
+        }
+
+        # updating
+        if(!empty($update)){
+            Ticket::table()->where('ticket_id', $ticket_id)->update($update);
+        }
+
+        # message
+        return response()->json(['status' => true]);
+    }
+
 }
 
