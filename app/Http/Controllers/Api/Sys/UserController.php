@@ -58,8 +58,13 @@ class UserController extends Controller
             $input['user_password'] = password_hash($password, PASSWORD_DEFAULT);
         }
         $input['user_description'] = trim(htmlentities($request->input('description')));
-        $input['group_id'] = trim(htmlentities($request->input('group_id')));
-        $input['is_block'] = $request->input('is_block') == 'false' ? 'N' : 'Y';
+
+        if(!empty($request->input('group_id'))){
+            $input['group_id'] = trim(htmlentities($request->input('group_id')));
+        }
+        if(!empty($request->input('is_block'))){
+            $input['is_block'] = $request->input('is_block') == 'false' ? 'N' : 'Y';
+        }
 
         $input['is_new'] = 'N';
         $input['updated_at'] = date('Y-m-d H:i:s');
