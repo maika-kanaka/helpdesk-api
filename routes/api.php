@@ -17,6 +17,9 @@ Route::get('master/categories', [
     'uses' => 'Api\Master\CategoryController@data'
 ]);
 
+
+
+
 Route::post('sys/user/login', [
     'uses' => 'Api\Sys\UserController@login'
 ]);
@@ -45,4 +48,8 @@ Route::post('trx/ticket/save', [
 
 Route::post('trx/ticket/status/change', [
     'uses' => 'Api\Trx\TicketController@status_change'
+]);
+
+Route::get('rpt/ticket/create', [
+    'uses' => 'Api\Trx\TicketController@create_report'
 ]);

@@ -180,5 +180,12 @@ class TicketController extends Controller
         return response()->json(['status' => true]);
     }
 
+
+
+    public function create_report()
+    {
+        return view('rpt/ticket');
+    }
+
 }
 
