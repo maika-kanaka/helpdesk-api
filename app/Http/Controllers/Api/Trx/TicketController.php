@@ -29,7 +29,7 @@ class TicketController extends Controller
 
         # query
         $query = Ticket::table('t_ticket')
-                        ->select(\DB::raw('t_ticket.*, t_cat.category_name, u_created.user_fullname, u_accepted.user_fullname, u_rejected.user_fullname'))
+                        ->select(\DB::raw('t_ticket.*, t_cat.category_name, u_created.user_fullname, u_accepted.user_fullname as user_acc_fullname, u_rejected.user_fullname AS user_reject_fullname'))
                         ->leftJoin(Category::$table . " as t_cat", "t_cat.category_id", "=", "t_ticket.category_id")
                         ->leftJoin(User::$table . " as u_created", "u_created.user_id", "=", "t_ticket.created_by")
                         ->leftJoin(User::$table . " as u_accepted", "u_accepted.user_id", "=", "t_ticket.accepted_by")
