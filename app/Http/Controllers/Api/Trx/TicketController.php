@@ -192,11 +192,11 @@ class TicketController extends Controller
                                     ->orderBy('created_at');
 
         if( !empty($request->input('date_from')) ){
-            $data['tickets']->where('created_at', '>=', $request->input('date_from'));
+            $data['tickets']->where('t.created_at', '>=', $request->input('date_from'));
         }
 
         if( !empty($request->input('date_to')) ){
-            $data['tickets']->where('created_at', '<=', $request->input('date_to'));
+            $data['tickets']->where('t.created_at', '<=', $request->input('date_to'));
         }
 
         if( !empty($request->input('category')) ){
