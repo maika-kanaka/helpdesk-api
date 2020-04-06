@@ -35,7 +35,9 @@
         $pdf->AddPage();
 
         $html = "
-            <table border='1px'>
+            <h1> Report Helpdesk </h1>
+
+            <table border=\"1\" cellspacing='0' cellpadding='1'>
                 <thead>
                     <tr>
                         <th> Code </th>
@@ -47,9 +49,30 @@
                         <th> Status </th>
                     </tr>
                 </thead>
-            </table>";
 
-        $pdf->writeHTML($html, false, false, true, false);
+                <tbody>
+        ";
+
+        foreach ($tickets as $key => $value) {
+            $html .= "
+                <tr>
+                    <td> ". $value->ticket_code ." </td>
+                    <td> ". $value->created_at ." </td>
+                    <td> ". $value->category_name ." </td>
+                    <td> ". $value->ticket_title ." </td>
+                    <td> ". $value->ticket_desc ." </td>
+                    <td> ". $value->ticket_priority ." </td>
+                    <td> ". $value->ticket_status ." </td>
+                </tr>
+            ";
+        }
+
+        $html .= "
+                </tbody>
+            </table>
+        ";
+
+        $pdf->writeHTML($html, true, false, false, false, '');
 
         // // content
         // $first_word_old = '';

@@ -184,7 +184,28 @@ class TicketController extends Controller
 
     public function create_report()
     {
-        return view('rpt/ticket');
+        $request = app('request');
+
+        $data['tickets'] = Ticket::table('t')
+                                    ->join(Category::$table . " AS c", "c.category_id", "=", "t.category_id")
+                                    ->select("t.*", "c.category_name")
+                                    ->orderBy('created_at');
+
+        if( !empty($request->input('date_from')) ){
+            $data['tickets']->where('created_at', '>=', $request->input('date_from'));
+        }
+
+        if( !empty($request->input('date_to')) ){
+            $data['tickets']->where('created_at', '<=', $request->input('date_to'));
+        }
+
+        if( !empty($request->input('category')) ){
+            $data['tickets']->where('t.category_id', '=', $request->input('category_id'));
+        }
+
+        $data['tickets'] = $data['tickets']->get();
+
+        return view('rpt/ticket', $data);
     }
 
 }
