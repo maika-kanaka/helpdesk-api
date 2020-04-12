@@ -198,14 +198,15 @@ class TicketController extends Controller
             if($date_from !== false){
                 $data['tickets']->where('t.created_at', '>=', $date_from->format('Y-m-d'));
             }
+            \Log::info('date_from:'. var_dump($date_from));
         }
 
         if( !empty($request->input('date_to')) ){
             $date_to = new \DateTIme($request->input('date_to'));
             if($date_to !== false){
-                $data['tickets']->where('t.created_at', '>=', $date_to->format('Y-m-d'));
+                $data['tickets']->where('t.created_at', '<=', $date_to->format('Y-m-d'));
             }
-            $data['tickets']->where('t.created_at', '<=', $request->input('date_to'));
+            \Log::info('date_to:'. var_dump($date_to));
         }
 
         if( !empty($request->input('category')) ){
