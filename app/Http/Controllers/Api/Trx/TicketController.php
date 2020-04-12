@@ -189,7 +189,7 @@ class TicketController extends Controller
         $request = app('request');
 
         $data['tickets'] = Ticket::table('t')
-                                    ->join(Category::$table . " AS c", "c.category_id", "=", "t.category_id")
+                                    ->leftJoin(Category::$table . " AS c", "c.category_id", "=", "t.category_id")
                                     ->select("t.*", "c.category_name")
                                     ->orderBy('created_at');
 
@@ -202,7 +202,7 @@ class TicketController extends Controller
         }
 
         if( !empty($request->input('category')) ){
-            $data['tickets']->where('t.category_id', '=', $request->input('category_id'));
+            $data['tickets']->where('t.category_id', '=', $request->input('category'));
         }
 
         $data['tickets'] = $data['tickets']->get();
