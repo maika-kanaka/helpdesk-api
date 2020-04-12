@@ -210,7 +210,9 @@ class TicketController extends Controller
         }
 
         if( !empty($request->input('category')) ){
-            $data['tickets']->where('t.category_id', '=', $request->input('category'));
+            if($request->input('category') != 'undefined'){
+                $data['tickets']->where('t.category_id', '=', $request->input('category'));
+            }
         }
 
         $data['tickets'] = $data['tickets']->get();
