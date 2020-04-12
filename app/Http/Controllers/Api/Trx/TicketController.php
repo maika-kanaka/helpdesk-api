@@ -198,7 +198,7 @@ class TicketController extends Controller
             if($date_from !== false){
                 $data['tickets']->where('t.created_at', '>=', $date_from->format('Y-m-d'));
             }
-            \Log::info('date_from:'. var_dump($date_from));
+            \Log::info('date_from:'. $date_from);
         }
 
         if( !empty($request->input('date_to')) ){
@@ -206,7 +206,7 @@ class TicketController extends Controller
             if($date_to !== false){
                 $data['tickets']->where('t.created_at', '<=', $date_to->format('Y-m-d'));
             }
-            \Log::info('date_to:'. var_dump($date_to));
+            \Log::info('date_to:'. $date_to);
         }
 
         if( !empty($request->input('category')) ){
