@@ -193,7 +193,7 @@ class TicketController extends Controller
                                     ->select("t.*", "c.category_name")
                                     ->orderBy('created_at');
 
-        if( !empty($request->input('date_from')) ){
+        if( !empty($request->input('date_from')) && $request->input('date_from') != 'undefined' ){
             $date_from = new \DateTIme($request->input('date_from'));
             if($date_from !== false){
                 $data['tickets']->where('t.created_at', '>=', $date_from->format('Y-m-d'));
@@ -201,7 +201,7 @@ class TicketController extends Controller
             \Log::info('date_from:'. $date_from->format('Y-m-d'));
         }
 
-        if( !empty($request->input('date_to')) ){
+        if( !empty($request->input('date_to')) && $request->input('date_to') != 'undefined' ){
             $date_to = new \DateTIme($request->input('date_to'));
             if($date_to !== false){
                 $data['tickets']->where('t.created_at', '<=', $date_to->format('Y-m-d'));
