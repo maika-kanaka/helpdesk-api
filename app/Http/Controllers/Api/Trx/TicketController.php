@@ -36,6 +36,12 @@ class TicketController extends Controller
                         ->leftJoin(User::$table . " as u_rejected", "u_rejected.user_id", "=", "t_ticket.rejected_by")
                         ->orderBy('t_ticket.created_at', 'desc');
 
+        # ambil data sesuai kategori teknisi
+        if( !empty($data_jwt->user->user_category) )
+        {
+            $query->where('t_ticket.category_id', $data_jwt->user->user_category);
+        }
+
         # filter ambil data berdasarkan hak akses
         if (Auth::role_api($data_jwt->user->group_id, 'ticket_view_all') === False) {
             if (Auth::role_api($data_jwt->user->group_id, 'ticket_view_support')) {
