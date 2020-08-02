@@ -177,6 +177,12 @@ class TicketController extends Controller
                 'rejected_by' => $data_jwt->user->user_id,
                 'rejected_notes' => trim(htmlentities($request->input('reason')))
             ];
+        }else if($status == 'canceled' && $data_ticket->ticket_status == 'open'){
+            $update = [
+                'ticket_status' => 'canceled',
+                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_by' => $data_jwt->user->user_id
+            ];
         }
 
         # updating
