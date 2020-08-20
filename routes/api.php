@@ -50,6 +50,15 @@ Route::post('trx/ticket/status/change', [
     'uses' => 'Api\Trx\TicketController@status_change'
 ]);
 
+Route::delete('trx/ticket/delete', [
+    'uses' => 'Api\Trx\TicketController@delete'
+]);
+
+Route::post('trx/ticket/edit', [
+    'uses' => 'Api\Trx\TicketController@edit'
+]);
+
 Route::get('rpt/ticket/create', [
     'uses' => 'Api\Trx\TicketController@create_report'
 ]);
+
