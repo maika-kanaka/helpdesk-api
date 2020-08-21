@@ -141,6 +141,7 @@ class TicketController extends Controller
         return ['input' => $input, 'image' => $image];
     }
 
+
     public function status_change(Request $request)
     {
         # param
@@ -194,8 +195,85 @@ class TicketController extends Controller
         return response()->json(['status' => true]);
     }
 
+    public function delete(Request $request)
+    {
+    	try {
+            $ticket_id = trim($request->input('ticket_id'));
+            $jwt = trim($request->input('jwt'));
+            
+            try {
+                $data_jwt = JWT::decode($jwt, config('jwt.key'), config('jwt.algo'));
+            } catch (\Exception $e) {
+                $data_jwt = false;
+            }
+    
+            if($data_jwt === false){
+                return response()->json(array('is_valid' => false, 'message' => 'Token invalid!'));
+            }
+    
+            $data_ticket = Ticket::table()->where('ticket_id', $ticket_id);
+            $data_ticket->delete();
 
 
+            return response()->json(['success'=>True, 'message' => 'Data Deleted Successfuly'], 200);
+
+        } catch (\Exception $e) {
+            return response()->json(['success'=>False, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function edit(Request $request)
+    {
+        # param
+        $jwt = trim($request->input('jwt'));
+        $ticket_id = trim($request->input('ticket_id'));
+        // $image = $request->input('ticket_photo');
+        // if(!empty($image) && $image != 'undefined')
+        // {
+        //     $image = str_replace(['data:image/png;base64,', 'data:image/jpeg;base64,', 'data:image/jpg;base64,'], '', $image);
+        //     $image = str_replace(' ', '+', $image);
+        //     $imageName = $request['ticket_id'] .'.'. 'jpg';
+        //     $update['ticket_photo'] = $imageName;
+        // }
+        
+        # hak akses
+        try {
+            $data_jwt = JWT::decode($jwt, config('jwt.key'), config('jwt.algo'));
+        } catch (\Exception $e) {
+            $data_jwt = false;
+        }
+
+        if($data_jwt === false){
+            return response()->json(array('is_valid' => false, 'message' => 'Token invalid!'));
+        }
+
+        $data_ticket = Ticket::table()->where('ticket_id', $ticket_id)->first();
+      
+        # kondisi update
+        $update = [];
+        if($ticket_id == $data_ticket->ticket_id ){
+           
+            $update = [
+                'ticket_title' => trim($request->input('ticket_title')),
+                'category_id' => trim($request->input('category_id')),
+                'ticket_priority' => $request->input('ticket_priority') == 'true' ? 'high' : 'low',
+                'ticket_desc' => trim($request->input('ticket_desc')),
+                // 'ticket_photo' => $image,
+                'updated_at' => date('Y-m-d H:i:s'),
+                'updated_by' => $data_jwt->user->user_id
+            ];
+        }
+
+        # updating
+        if(!empty($update)){
+            Ticket::table()->where('ticket_id', $ticket_id)->update($update);
+        }
+
+        # message
+        return response()->json(['status' => true]);
+
+    }
+    
     public function create_report()
     {
         $request = app('request');
