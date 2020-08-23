@@ -129,7 +129,7 @@ class TicketController extends Controller
         {
             $image = str_replace(['data:image/png;base64,', 'data:image/jpeg;base64,', 'data:image/jpg;base64,'], '', $image);
             $image = str_replace(' ', '+', $image);
-            $imageName = $input['ticket_id'] . time() .'.'. 'jpg';
+            $imageName = $input['ticket_id'] . '_' . time() .'.'. 'jpg';
             $input['ticket_photo'] = $imageName;
         }
         $input['ticket_desc'] = trim($req->input('description'));
@@ -265,7 +265,7 @@ class TicketController extends Controller
             {
                 $image = str_replace(['data:image/png;base64,', 'data:image/jpeg;base64,', 'data:image/jpg;base64,'], '', $image);
                 $image = str_replace(' ', '+', $image);
-                $imageName = $input['ticket_id'] . time() .'.'. 'jpg';
+                $imageName = $ticket_id. '_' . time() .'.'. 'jpg';
                 $photo = ['ticket_photo' => $imageName];
                 
             Ticket::table()->where('ticket_id', $ticket_id)->update($photo);
