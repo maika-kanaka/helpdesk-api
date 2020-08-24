@@ -17,7 +17,6 @@ use App\Models\Trx\Ticket;
 
 class TicketController extends Controller
 {
-
     public function data(Request $request)
     {
         # param
@@ -130,7 +129,7 @@ class TicketController extends Controller
         {
             $image = str_replace(['data:image/png;base64,', 'data:image/jpeg;base64,', 'data:image/jpg;base64,'], '', $image);
             $image = str_replace(' ', '+', $image);
-            $imageName = $input['ticket_id'] .'.'. 'jpg';
+            $imageName = $input['ticket_id'] . '_' . time() .'.'. 'jpg';
             $input['ticket_photo'] = $imageName;
         }
         $input['ticket_desc'] = trim($req->input('description'));
@@ -200,7 +199,8 @@ class TicketController extends Controller
     	try {
             $ticket_id = trim($request->input('ticket_id'));
             $jwt = trim($request->input('jwt'));
-            
+            $photo = trim($request->input('photo'));
+            // $imageName = $input['ticket_id'] . time() .'.'. 'jpg';
             try {
                 $data_jwt = JWT::decode($jwt, config('jwt.key'), config('jwt.algo'));
             } catch (\Exception $e) {
@@ -213,8 +213,7 @@ class TicketController extends Controller
     
             $data_ticket = Ticket::table()->where('ticket_id', $ticket_id);
             $data_ticket->delete();
-
-
+            \File::delete(public_path(). '/imgs/ticket/' . $photo);
             return response()->json(['success'=>True, 'message' => 'Data Deleted Successfuly'], 200);
 
         } catch (\Exception $e) {
@@ -227,14 +226,8 @@ class TicketController extends Controller
         # param
         $jwt = trim($request->input('jwt'));
         $ticket_id = trim($request->input('ticket_id'));
-        // $image = $request->input('ticket_photo');
-        // if(!empty($image) && $image != 'undefined')
-        // {
-        //     $image = str_replace(['data:image/png;base64,', 'data:image/jpeg;base64,', 'data:image/jpg;base64,'], '', $image);
-        //     $image = str_replace(' ', '+', $image);
-        //     $imageName = $request['ticket_id'] .'.'. 'jpg';
-        //     $update['ticket_photo'] = $imageName;
-        // }
+        $image = $request->input('ticket_photo');
+        $photo_old = $request->input('photo_old');
         
         # hak akses
         try {
@@ -252,21 +245,36 @@ class TicketController extends Controller
         # kondisi update
         $update = [];
         if($ticket_id == $data_ticket->ticket_id ){
-           
+            
             $update = [
                 'ticket_title' => trim($request->input('ticket_title')),
                 'category_id' => trim($request->input('category_id')),
                 'ticket_priority' => $request->input('ticket_priority') == 'true' ? 'high' : 'low',
                 'ticket_desc' => trim($request->input('ticket_desc')),
-                // 'ticket_photo' => $image,
                 'updated_at' => date('Y-m-d H:i:s'),
                 'updated_by' => $data_jwt->user->user_id
             ];
+            
+        
         }
-
         # updating
         if(!empty($update)){
             Ticket::table()->where('ticket_id', $ticket_id)->update($update);
+        }
+        if(!empty($image) && $image != 'undefined')
+            {
+                $image = str_replace(['data:image/png;base64,', 'data:image/jpeg;base64,', 'data:image/jpg;base64,'], '', $image);
+                $image = str_replace(' ', '+', $image);
+                $imageName = $ticket_id. '_' . time() .'.'. 'jpg';
+                $photo = ['ticket_photo' => $imageName];
+                
+            Ticket::table()->where('ticket_id', $ticket_id)->update($photo);
+            \File::put(public_path(). '/imgs/ticket/' . $imageName , base64_decode($image));
+        // }
+        // if(!empty($photo_old) && $photo_old != 'undefined' || $photo_old != 'null' ){
+        
+            \File::delete(public_path(). '/imgs/ticket/' . $photo_old);
+        
         }
 
         # message
